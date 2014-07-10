@@ -1,0 +1,10 @@
+{
+  "name":"aligent/customformelements",
+  "type":"magento-module",
+  "license":"OSL-3.0",
+  "homepage":"https://github.com/aligent/Aligent_CustomFormElements",
+  "description":"Customised admin form elements for EAV atteibutes.",
+  "require":{
+      "magento-hackathon/magento-composer-installer":"*",
+  }
+}

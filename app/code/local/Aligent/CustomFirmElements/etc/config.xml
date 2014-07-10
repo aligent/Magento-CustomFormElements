@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Aligent_CustomFormElements>
+            <version>0.0.1</version>
+        </Aligent_CustomFormElements>
+    </modules>
+    <global>
+        <models>
+            <aligent_customformelements>
+                <class>Aligent_CustomFormElements_Model</class>
+                <resourceModel>aligent_customformelements_resource</resourceModel>
+            </aligent_customformelements>
+            <aligent_customformelements_resource>
+                <class>Aligent_CustomFormElements_Model_Resource</class>
+            </aligent_customformelements_resource>
+        </models>
+        <blocks>
+            <aligent_customformelements>
+                <class>Aligent_CustomFormElements_Block</class>
+            </aligent_customformelements>
+        </blocks>
+        <helpers>
+            <aligent_customformelements>
+                <class>Aligent_CustomFormElements_Helper</class>
+            </aligent_customformelements>
+        </helpers>
+        <resources>
+            <aligent_customformelements_setup>
+                <setup>
+                    <module>Aligent_CustomFormElements</module>
+                </setup>
+            </aligent_customformelements_setup>
+        </resources>
+    </global>
+</config>

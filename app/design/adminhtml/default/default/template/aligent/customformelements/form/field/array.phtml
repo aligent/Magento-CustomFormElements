@@ -24,7 +24,7 @@
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
-
+<?php /** @var $this Aligent_CustomFormElements_Block_Array_Generic */ ?>
 <?php
 $_htmlId = $this->getHtmlId() ? $this->getHtmlId() : '_' . uniqid();
 
@@ -75,7 +75,16 @@ $_colspan = $_colspan > 1 ? 'colspan="' . $_colspan . '"' : '';
                     <span><span><span><?php echo $this->_addButtonLabel ?></span></span></span>
                 </button>
             </div>
-
+            <?php if ($this->getCanCopyPasteJson()): ?>
+                <p>
+                    <button style="" onclick="" class="scalable" type="button" id="copyJson<?php echo $_htmlId ?>">
+                        <span><span><span><?php echo $this->__('Copy JSON'); ?></span></span></span>
+                    </button>
+                    <button style="" onclick="" class="scalable" type="button" id="pasteJson<?php echo $_htmlId ?>">
+                        <span><span><span><?php echo $this->__('Paste JSON'); ?></span></span></span>
+                    </button>
+                </p>
+            <?php endif; ?>
             <?php if ($_element->getNote()) : ?>
                 <p class="note"><?php echo $_element->getNote() ?></p>
             <?php endif; ?>
@@ -88,6 +97,10 @@ $_colspan = $_colspan > 1 ? 'colspan="' . $_colspan . '"' : '';
             </td>
         <?php endif; ?>
     </tr>
+<?php endif; ?>
+
+<?php if ($this->getCanCopyPasteJson()): ?>
+    <script src="<?php echo $this->getJsUrl('zeroclipboard/ZeroClipboard.min.js'); ?>"></script>
 <?php endif; ?>
 
 <script type="text/javascript">
@@ -110,6 +123,8 @@ var arrayRow<?php echo $_htmlId ?> = {
     ),
 
     rowsCount : 0,
+    rowIds : [],
+    columnNames : ['<?php echo implode("', '", array_keys($this->_columns)); ?>'],
 
     add : function(templateData, insertAfterId)
     {
@@ -137,6 +152,7 @@ var arrayRow<?php echo $_htmlId ?> = {
         Event.observe('addAfterBtn' + templateData._id, 'click', this.add.bind(this, '', templateData._id));
 <?php endif;?>
 
+        this.rowIds.push(templateData._id);
         this.rowsCount += 1;
     },
 
@@ -144,6 +160,12 @@ var arrayRow<?php echo $_htmlId ?> = {
     {
         $(rowId).remove();
         this.rowsCount -= 1;
+        for (var i=0; i<this.rowIds.length; i++) {
+            if (this.rowIds[i] == rowId) {
+                this.rowIds.splice(i, 1);
+                break;
+            }
+        }
         if (0 == this.rowsCount) {
             this.showButtonOnly();
         }
@@ -153,11 +175,45 @@ var arrayRow<?php echo $_htmlId ?> = {
     {
         $('grid<?php echo $_htmlId ?>').hide();
         $('empty<?php echo $_htmlId ?>').show();
+    },
+
+    getJson : function () {
+        var tableData = {};
+        for (var idx=0; idx<this.rowIds.length; idx++) {
+            for (var colIdx=0; colIdx<this.columnNames.length; colIdx++) {
+                if (typeof tableData[this.rowIds[idx]] == 'undefined') {
+                    tableData[this.rowIds[idx]] = {};
+                }
+
+                tableData[this.rowIds[idx]][this.columnNames[colIdx]] =
+                    $$('input[name="<?php echo $_element->getName() ?>['+this.rowIds[idx]+']['+this.columnNames[colIdx]+']"]').first().value;
+
+            }
+        }
+        return JSON.stringify(tableData);
+    },
+
+    pasteJson : function () {
+        alert('TODO');
     }
 }
 
 // bind add action to "Add" button in last row
 Event.observe('addToEndBtn<?php echo $_htmlId ?>', 'click', arrayRow<?php echo $_htmlId ?>.add.bind(arrayRow<?php echo $_htmlId ?>, '', ''));
+
+<?php if ($this->getCanCopyPasteJson()): ?>
+//Event.observe(, 'click', arrayRow<?php echo $_htmlId ?>.copyJson.bind(arrayRow<?php echo $_htmlId ?>, '', ''));
+
+var copyClient = new ZeroClipboard($('copyJson<?php echo $_htmlId ?>'));
+copyClient.on( "ready", function( readyEvent ) {
+    copyClient.on("copy", function(e) {
+        var json = arrayRow<?php echo $_htmlId ?>.getJson();
+        copyClient.setData('text/plain', json);
+    });
+});
+
+Event.observe('pasteJson<?php echo $_htmlId ?>', 'click', arrayRow<?php echo $_htmlId ?>.pasteJson.bind(arrayRow<?php echo $_htmlId ?>, '', ''));
+<?php endif; ?>
 
 // add existing rows
 <?php

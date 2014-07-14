@@ -24,22 +24,70 @@ class Aligent_CustomFormElements_Block_Array extends Varien_Data_Form_Element_Ab
         return array();
     }
 
+
+    /**
+     * Enable or Disable the "Add After" buttons.
+     *
+     * @param $bValue boolean
+     * @return $this
+     */
     public function setAddAfter($bValue) {
         $this->_childBlock->setAddAfter($bValue);
         return $this;
     }
 
+
+    /**
+     * Indicates whether or not the "Add After" buttons will be displayed.
+     *
+     * @return bool
+     */
     public function getAddAfter() {
         return $this->_childBlock->getAddAfter();
     }
 
+
+    /**
+     * Sets the label for the "Add" button.
+     *
+     * @param $vLabel string
+     * @return $this
+     */
     public function setAddButtonLabel($vLabel) {
         $this->_childBlock->setAddButtonLabel($vLabel);
         return $this;
     }
 
+
+    /**
+     * Returns the label for the "Add" button.
+     *
+     * @return string
+     */
     public function getAddButtonLabel() {
         return $this->_childBlock->getAddButtonLabel();
+    }
+
+
+    /**
+     * Enable or disable the "Copy JSON" and "Paste JSON" buttons.
+     *
+     * @param $bEnabled boolean True to show buttons
+     * @return $this
+     */
+    public function setCanCopyPasteJson($bEnabled) {
+        $this->_childBlock->setCanCopyPasteJson($bEnabled);
+        return $this;
+    }
+
+
+    /**
+     * Returns true if the "Copy JSON" and "Paste JSON" buttons are enabled.
+     *
+     * @return boolean
+     */
+    public function getCanCopyPasteJson() {
+        return $this->_childBlock->getCanCopyPasteJson();
     }
 
     /**

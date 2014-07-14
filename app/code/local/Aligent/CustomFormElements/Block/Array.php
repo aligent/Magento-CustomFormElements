@@ -9,6 +9,7 @@ class Aligent_CustomFormElements_Block_Array extends Varien_Data_Form_Element_Ab
         parent::__construct($attributes);
 
         $this->_childBlock = Mage::app()->getLayout()->createBlock('aligent_customformelements/array_generic');
+        $this->_childBlock->addData($attributes);
     }
 
     public function getHtml() {

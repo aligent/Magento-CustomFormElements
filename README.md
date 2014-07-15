@@ -15,6 +15,12 @@ Usage
 
 ### Multi Column Table Attribute
 
+This control wraps and extends the Mage_Adminhtml_Block_System_Config_Form_Field_Array_Abstract
+field renderer available for System Configuration values and makes it available
+for product and category attributes.  The data is stored in a text field in the
+database serialized as JSON, and the UI has been extended to (optionally) allow
+the table to be copied/pasted as a JSON blob.
+
 ![Table Attribute](table.png)
 
 You'll need to create an extension with a block that defines the columns that 
@@ -113,7 +119,7 @@ Installation Instructions
 
 Uninstallation
 --------------
-1. Delete .modman/Aligent_Feeds and run "modman repair", or remove from 
+1. Delete .modman/Magento-CustomFormElements and run "modman repair", or remove from
 composer.json and run "composer install".
 
 Support

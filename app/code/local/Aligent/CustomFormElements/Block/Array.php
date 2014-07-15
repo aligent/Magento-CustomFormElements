@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Array Form Element
+ *
+ * @category  Aligent
+ * @package   CustomFormElements
+ * @author    Jim O'Halloran <jim@aligent.com.au>
+ * @copyright 2014 Aligent Consulting.
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      http://www.aligent.com.au/
+ */
 class Aligent_CustomFormElements_Block_Array extends Varien_Data_Form_Element_Abstract {
 
     /** @var $_childBlock Aligent_CustomFormElements_Block_Array_Generic */

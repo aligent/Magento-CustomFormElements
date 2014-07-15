@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Generic multicolumn table form element renderer.
+ *
+ * @category  Aligent
+ * @package   CustomFormElements
+ * @author    Jim O'Halloran <jim@aligent.com.au>
+ * @copyright 2014 Aligent Consulting.
+ * @copyright Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      http://www.aligent.com.au/
+ */
 class Aligent_CustomFormElements_Block_Array_Generic extends Mage_Adminhtml_Block_System_Config_Form_Field_Array_Abstract {
 
     public function __construct() {

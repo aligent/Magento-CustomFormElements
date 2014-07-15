@@ -1,5 +1,5 @@
 Aligent Custom Form Elements Extension
-=====================
+======================================
 
 Facts
 -----
@@ -13,8 +13,7 @@ This extension provides customised form fields that can be used for EAV attribut
 Usage
 -----
 
-Multi Column Table Attribute
-============================
+### Multi Column Table Attribute
 
 ![Table Attribute](table.png)
 
@@ -110,7 +109,7 @@ foreach ($aAttributeSetIds as $iAttributeSetId) {
 
 Installation Instructions
 -------------------------
-1. Install this module via modman or COmposer
+1. Install this module via modman or Composer
 
 Uninstallation
 --------------

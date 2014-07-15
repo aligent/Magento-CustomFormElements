@@ -84,6 +84,12 @@ $_colspan = $_colspan > 1 ? 'colspan="' . $_colspan . '"' : '';
                         <span><span><span><?php echo $this->__('Paste JSON'); ?></span></span></span>
                     </button>
                 </p>
+                <p id="pasteJsonArea<?php echo $_htmlId ?>" style="display: none;">
+                    <textarea id="jsonText<?php echo $_htmlId ?>"></textarea>
+                    <button style="" onclick="" class="scalable" type="button" id="importJson<?php echo $_htmlId ?>">
+                        <span><span><span><?php echo $this->__('Update Table'); ?></span></span></span>
+                    </button>
+                </p>
             <?php endif; ?>
             <?php if ($_element->getNote()) : ?>
                 <p class="note"><?php echo $_element->getNote() ?></p>
@@ -126,8 +132,7 @@ var arrayRow<?php echo $_htmlId ?> = {
     rowIds : [],
     columnNames : ['<?php echo implode("', '", array_keys($this->_columns)); ?>'],
 
-    add : function(templateData, insertAfterId)
-    {
+    add : function(templateData, insertAfterId) {
         // generate default template data
         if ('' == templateData) {
             var d = new Date();
@@ -154,10 +159,10 @@ var arrayRow<?php echo $_htmlId ?> = {
 
         this.rowIds.push(templateData._id);
         this.rowsCount += 1;
+        this.hideButtonOnly();
     },
 
-    del : function(rowId)
-    {
+    del : function(rowId) {
         $(rowId).remove();
         this.rowsCount -= 1;
         for (var i=0; i<this.rowIds.length; i++) {
@@ -171,13 +176,17 @@ var arrayRow<?php echo $_htmlId ?> = {
         }
     },
 
-    showButtonOnly : function()
-    {
+    showButtonOnly : function() {
         $('grid<?php echo $_htmlId ?>').hide();
         $('empty<?php echo $_htmlId ?>').show();
     },
 
-    getJson : function () {
+    hideButtonOnly : function() {
+        $('grid<?php echo $_htmlId ?>').show();
+        $('empty<?php echo $_htmlId ?>').hide();
+    },
+
+    toJson : function () {
         var tableData = {};
         for (var idx=0; idx<this.rowIds.length; idx++) {
             for (var colIdx=0; colIdx<this.columnNames.length; colIdx++) {
@@ -193,8 +202,21 @@ var arrayRow<?php echo $_htmlId ?> = {
         return JSON.stringify(tableData);
     },
 
-    pasteJson : function () {
-        alert('TODO');
+    fromJson : function (jsonString) {
+        // Remove all existing rows
+        for (var idx=(this.rowIds.length-1); idx >= 0; idx--) {
+            this.del(this.rowIds[idx]);
+        }
+
+        // Parse the JSON and add new rows.
+        var rows = JSON.parse(jsonString);
+        Object.keys(rows).each(function(key) {
+            if (typeof rows[key]._id == 'undefined') {
+                var d = new Date();
+                rows[key]._id = '_' + d.getTime() + '_' + d.getMilliseconds()
+            }
+            this.add(rows[key], '');
+        }.bind(this));
     }
 }
 
@@ -202,17 +224,26 @@ var arrayRow<?php echo $_htmlId ?> = {
 Event.observe('addToEndBtn<?php echo $_htmlId ?>', 'click', arrayRow<?php echo $_htmlId ?>.add.bind(arrayRow<?php echo $_htmlId ?>, '', ''));
 
 <?php if ($this->getCanCopyPasteJson()): ?>
-//Event.observe(, 'click', arrayRow<?php echo $_htmlId ?>.copyJson.bind(arrayRow<?php echo $_htmlId ?>, '', ''));
 
-var copyClient = new ZeroClipboard($('copyJson<?php echo $_htmlId ?>'));
-copyClient.on( "ready", function( readyEvent ) {
-    copyClient.on("copy", function(e) {
-        var json = arrayRow<?php echo $_htmlId ?>.getJson();
-        copyClient.setData('text/plain', json);
+    var copyClient = new ZeroClipboard($('copyJson<?php echo $_htmlId ?>'));
+    copyClient.on( "ready", function( readyEvent ) {
+        copyClient.on("copy", function(e) {
+            var json = arrayRow<?php echo $_htmlId ?>.toJson();
+            copyClient.setData('text/plain', json);
+            alert("JSON data place on the clipboard ready to paste.")
+        });
     });
-});
 
-Event.observe('pasteJson<?php echo $_htmlId ?>', 'click', arrayRow<?php echo $_htmlId ?>.pasteJson.bind(arrayRow<?php echo $_htmlId ?>, '', ''));
+    Event.observe('pasteJson<?php echo $_htmlId ?>', 'click', function() {
+        $("pasteJsonArea<?php echo $_htmlId ?>").toggle();
+    });
+
+    Event.observe('importJson<?php echo $_htmlId ?>', 'click', function() {
+        var json = $('jsonText<?php echo $_htmlId ?>').value;
+        arrayRow<?php echo $_htmlId ?>.fromJson(json);
+        $("pasteJsonArea<?php echo $_htmlId ?>").hide();
+    });
+
 <?php endif; ?>
 
 // add existing rows
@@ -227,8 +258,6 @@ foreach ($this->getArrayRows() as $_rowId => $_row) {
 // initialize standalone button
 $('empty<?php echo $_htmlId ?>').hide();
 Event.observe('emptyAddBtn<?php echo $_htmlId ?>', 'click', function () {
-    $('grid<?php echo $_htmlId ?>').show();
-    $('empty<?php echo $_htmlId ?>').hide();
     arrayRow<?php echo $_htmlId ?>.add('', '');
 });
 

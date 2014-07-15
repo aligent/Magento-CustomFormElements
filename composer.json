@@ -5,6 +5,6 @@
   "homepage":"https://github.com/aligent/Aligent_CustomFormElements",
   "description":"Customised admin form elements for EAV atteibutes.",
   "require":{
-      "magento-hackathon/magento-composer-installer":"*",
+      "magento-hackathon/magento-composer-installer":"*"
   }
 }

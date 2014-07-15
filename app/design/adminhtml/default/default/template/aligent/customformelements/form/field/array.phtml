@@ -187,17 +187,16 @@ var arrayRow<?php echo $_htmlId ?> = {
     },
 
     toJson : function () {
-        var tableData = {};
+        var tableData = [];
         for (var idx=0; idx<this.rowIds.length; idx++) {
+            var rowData = {};
             for (var colIdx=0; colIdx<this.columnNames.length; colIdx++) {
-                if (typeof tableData[this.rowIds[idx]] == 'undefined') {
-                    tableData[this.rowIds[idx]] = {};
-                }
-
-                tableData[this.rowIds[idx]][this.columnNames[colIdx]] =
+                rowData[this.columnNames[colIdx]] =
                     $$('input[name="<?php echo $_element->getName() ?>['+this.rowIds[idx]+']['+this.columnNames[colIdx]+']"]').first().value;
 
             }
+
+            tableData.push(rowData);
         }
         return JSON.stringify(tableData);
     },
@@ -230,7 +229,7 @@ Event.observe('addToEndBtn<?php echo $_htmlId ?>', 'click', arrayRow<?php echo $
         copyClient.on("copy", function(e) {
             var json = arrayRow<?php echo $_htmlId ?>.toJson();
             copyClient.setData('text/plain', json);
-            alert("JSON data place on the clipboard ready to paste.")
+            alert("JSON data placed on the clipboard ready to paste.")
         });
     });
 

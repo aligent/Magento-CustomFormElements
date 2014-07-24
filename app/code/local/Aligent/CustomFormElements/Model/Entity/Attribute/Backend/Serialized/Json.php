@@ -31,6 +31,13 @@ class Aligent_CustomFormElements_Model_Entity_Attribute_Backend_Serialized_Json
                 unset($aData['__empty']);
             }
 
+            if (is_string($aData)) {
+                try {
+                    $aData = Mage::helper('core')->jsonDecode($aData);
+                } catch (Exception $e) {
+                    //
+                }
+            }
             $object->setData($attrCode, Mage::helper('core')->jsonEncode($aData));
         }
 

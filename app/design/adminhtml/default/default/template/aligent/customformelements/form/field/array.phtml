@@ -185,7 +185,7 @@ var arrayRow<?php echo $_htmlId ?> = {
 
             tableData.push(rowData);
         }
-        return JSON.stringify(tableData);
+        return tableData.toJSON();
     },
 
     fromJson : function (jsonString) {
@@ -197,11 +197,13 @@ var arrayRow<?php echo $_htmlId ?> = {
         // Parse the JSON and add new rows.
         var rows = JSON.parse(jsonString);
         Object.keys(rows).each(function(key) {
-            if (typeof rows[key]._id == 'undefined') {
-                var d = new Date();
-                rows[key]._id = '_' + d.getTime() + '_' + d.getMilliseconds()
+            if (typeof rows[key] != 'function') {
+                if (typeof rows[key]._id == 'undefined') {
+                    var d = new Date();
+                    rows[key]._id = '_' + d.getTime() + '_' + key;
+                }
+                this.add(rows[key], '');
             }
-            this.add(rows[key], '');
         }.bind(this));
     }
 }

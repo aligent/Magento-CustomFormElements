@@ -181,7 +181,7 @@ var arrayRow<?php echo $_htmlId ?> = {
 
             tableData.push(rowData);
         }
-        return tableData.toJSON();
+        return Object.toJSON(tableData);
     },
 
     fromJson : function (jsonString) {

@@ -110,4 +110,15 @@ class Aligent_CustomFormElements_Block_Array extends Varien_Data_Form_Element_Ab
         $this->_childBlock->addColumn($name, $params);
         return $this;
     }
+
+    public function getAfterElementHtml() {
+        if (parent::getAfterElementHtml() != '') {
+            return Mage::app()->getLayout()->createBlock('core/template')
+                ->setTemplate('aligent/customformelements/form/field/array/change.phtml')
+                ->setElement($this)
+                ->toHtml();
+        }
+        return '';
+
+    }
 }

@@ -45,4 +45,16 @@
             </aligent_customformelements_setup>
         </resources>
     </global>
+    <adminhtml>
+        <events>
+            <catalog_product_attribute_update_before>
+                <observers>
+                    <aligent_customformelements>
+                        <class>aligent_customformelements/observer</class>
+                        <method>catalogProductAttributeUpdateBefore</method>
+                    </aligent_customformelements>
+                </observers>
+            </catalog_product_attribute_update_before>
+        </events>
+    </adminhtml>
 </config>

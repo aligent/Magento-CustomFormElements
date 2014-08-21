@@ -1,0 +1,46 @@
+<?php /** @var $this Mage_Core_Block_Template */ ?>
+
+<?php $oElement = $this->getElement(); ?>
+
+<span class="attribute-change-checkbox">
+    <input type="checkbox" id="<?php echo $oElement->getId() ?>-checkbox" onclick="toogleArrayFieldEditMode(this, '<?php echo $oElement->getId() ?>')" />
+    <label for="<?php echo $oElement->getId() ?>-checkbox">
+        <?php echo Mage::helper('catalog')->__('Change') ?>
+    </label>
+</span>
+
+<script>
+    // Turns out we don't need to worry about defining the same function multiple
+    // times in javascript like we do in PHP.  So this is perfectly safe when
+    // there are multiple array fields on the same form.
+    function toogleArrayFieldEditMode(toogleIdentifier, fieldContainer) {
+        if ($(toogleIdentifier).checked) {
+            enableArrayFieldEditMode(fieldContainer);
+        } else {
+            disableArrayFieldEditMode(fieldContainer);
+        }
+    }
+
+    function disableArrayFieldEditMode(fieldContainer) {
+        $$("#link_to_packages input, #link_to_packages button").each(function(el) {
+            el.disabled = true;
+            el.addClassName('disabled');
+        });
+        if ($(fieldContainer + '_hidden')) {
+            $(fieldContainer + '_hidden').disabled = true;
+        }
+    }
+
+    function enableArrayFieldEditMode(fieldContainer) {
+        $$("#link_to_packages input, #link_to_packages button").each(function(el) {
+            el.disabled = false;
+            el.removeClassName('disabled');
+        });
+        if ($(fieldContainer + '_hidden')) {
+            $(fieldContainer + '_hidden').disabled = false;
+        }
+    }
+
+    disableArrayFieldEditMode('<?php echo $oElement->getId() ?>');
+</script>
+

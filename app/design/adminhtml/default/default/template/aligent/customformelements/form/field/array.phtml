@@ -39,52 +39,54 @@ $_colspan = $_colspan > 1 ? 'colspan="' . $_colspan . '"' : '';
     <tr>
         <td class="label"><?php echo trim($this->getElementLabelHtml()) ?></td>
         <td class="value">
+            <div id="<?php echo $_element->getId(); ?>">
+                <div class="grid" id="grid<?php echo $_htmlId ?>">
+                    <table cellpadding="0" cellspacing="0" class="border">
+                        <tbody>
 
-            <div class="grid" id="grid<?php echo $_htmlId ?>">
-                <table cellpadding="0" cellspacing="0" class="border">
-                    <tbody>
+                            <tr class="headings" id="headings<?php echo $_htmlId ?>">
+                                <?php foreach ($this->_columns as $columnName => $column):?>
+                                    <th><?php echo $column['label'] ?></th>
+                                <?php endforeach;?>
+                                <th <?php echo $_colspan?>></th>
+                            </tr>
 
-                        <tr class="headings" id="headings<?php echo $_htmlId ?>">
-                            <?php foreach ($this->_columns as $columnName => $column):?>
-                                <th><?php echo $column['label'] ?></th>
-                            <?php endforeach;?>
-                            <th <?php echo $_colspan?>></th>
-                        </tr>
+                            <tr id="addRow<?php echo $_htmlId ?>">
+                                <td colspan="<?php echo count($this->_columns) ?>"></td>
+                                <td <?php echo $_colspan?>>
+                                    <button style="" onclick="" class="scalable add" type="button" id="addToEndBtn<?php echo $_htmlId ?>">
+                                        <span><span><span><?php echo $this->_addButtonLabel ?></span></span></span>
+                                    </button>
+                                </td>
+                            </tr>
 
-                        <tr id="addRow<?php echo $_htmlId ?>">
-                            <td colspan="<?php echo count($this->_columns) ?>"></td>
-                            <td <?php echo $_colspan?>>
-                                <button style="" onclick="" class="scalable add" type="button" id="addToEndBtn<?php echo $_htmlId ?>">
-                                    <span><span><span><?php echo $this->_addButtonLabel ?></span></span></span>
-                                </button>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-                <input type="hidden" name="<?php echo $_element->getName() ?>[__empty]" value="" />
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="<?php echo $_element->getName() ?>[__empty]" value="" />
+                </div>
+                <div id="empty<?php echo $_htmlId ?>">
+                    <button style="" onclick="" class="scalable add" type="button" id="emptyAddBtn<?php echo $_htmlId ?>">
+                        <span><span><span><?php echo $this->_addButtonLabel ?></span></span></span>
+                    </button>
+                </div>
+                <?php if ($this->getCanCopyPasteJson()): ?>
+                    <p>
+                        <button style="" onclick="" class="scalable" type="button" id="copyJson<?php echo $_htmlId ?>">
+                            <span><span><span><?php echo $this->__('Copy JSON'); ?></span></span></span>
+                        </button>
+                        <button style="" onclick="" class="scalable" type="button" id="pasteJson<?php echo $_htmlId ?>">
+                            <span><span><span><?php echo $this->__('Paste JSON'); ?></span></span></span>
+                        </button>
+                    </p>
+                    <p id="pasteJsonArea<?php echo $_htmlId ?>" style="display: none;">
+                        <textarea id="jsonText<?php echo $_htmlId ?>"></textarea>
+                        <button style="" onclick="" class="scalable" type="button" id="importJson<?php echo $_htmlId ?>">
+                            <span><span><span><?php echo $this->__('Update Table'); ?></span></span></span>
+                        </button>
+                    </p>
+                <?php endif; ?>
             </div>
-            <div id="empty<?php echo $_htmlId ?>">
-                <button style="" onclick="" class="scalable add" type="button" id="emptyAddBtn<?php echo $_htmlId ?>">
-                    <span><span><span><?php echo $this->_addButtonLabel ?></span></span></span>
-                </button>
-            </div>
-            <?php if ($this->getCanCopyPasteJson()): ?>
-                <p>
-                    <button style="" onclick="" class="scalable" type="button" id="copyJson<?php echo $_htmlId ?>">
-                        <span><span><span><?php echo $this->__('Copy JSON'); ?></span></span></span>
-                    </button>
-                    <button style="" onclick="" class="scalable" type="button" id="pasteJson<?php echo $_htmlId ?>">
-                        <span><span><span><?php echo $this->__('Paste JSON'); ?></span></span></span>
-                    </button>
-                </p>
-                <p id="pasteJsonArea<?php echo $_htmlId ?>" style="display: none;">
-                    <textarea id="jsonText<?php echo $_htmlId ?>"></textarea>
-                    <button style="" onclick="" class="scalable" type="button" id="importJson<?php echo $_htmlId ?>">
-                        <span><span><span><?php echo $this->__('Update Table'); ?></span></span></span>
-                    </button>
-                </p>
-            <?php endif; ?>
+            <?php echo $_element->getAfterElementHtml(); ?>
             <?php if ($_element->getNote()) : ?>
                 <p class="note"><?php echo $_element->getNote() ?></p>
             <?php endif; ?>

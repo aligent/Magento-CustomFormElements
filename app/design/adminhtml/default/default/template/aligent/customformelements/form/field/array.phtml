@@ -86,9 +86,17 @@ $_colspan = $_colspan > 1 ? 'colspan="' . $_colspan . '"' : '';
                     </p>
                 <?php endif; ?>
             </div>
-            <?php echo $_element->getAfterElementHtml(); ?>
             <?php if ($_element->getNote()) : ?>
                 <p class="note"><?php echo $_element->getNote() ?></p>
+            <?php endif; ?>
+            <?php if ($_element->getAfterElementHtml()): ?>
+                <span class="attribute-change-checkbox">
+                    <input type="checkbox" id="<?php echo $_htmlId ?>-checkbox"  onclick="toggleValueElements(this, $('grid<?php echo $_htmlId ?>').parentNode, null, !this.checked);" />
+                    <label for="<?php echo $_htmlId ?>-checkbox">Change</label>
+                    <script>
+                        toggleValueElements({checked:true}, $('grid<?php echo $_htmlId ?>').parentNode, $('<?php echo $_htmlId ?>-checkbox'));
+                    </script>
+                </span>
             <?php endif; ?>
         </td>
         <td class="scope-label"><span class="nobr"><?php echo $this->getScopeLabel() ?></span></td>

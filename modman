@@ -1,3 +1,3 @@
-app/code/local/Aligent/CustomFormElements app/code/local/Aligent/CustomFormElements
+app/code/community/Aligent/CustomFormElements app/code/community/Aligent/CustomFormElements
 app/design/adminhtml/default/default/template/aligent/customformelements app/design/adminhtml/default/default/template/aligent/customformelements
 app/etc/modules/Aligent_CustomFormElements.xml app/etc/modules/Aligent_CustomFormElements.xml

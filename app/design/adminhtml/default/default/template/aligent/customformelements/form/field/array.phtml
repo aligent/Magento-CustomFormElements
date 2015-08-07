@@ -13,7 +13,14 @@
 ?>
 <?php /** @var $this Aligent_CustomFormElements_Block_Array_Generic */ ?>
 <?php
-$_htmlId = $this->getHtmlId() ? $this->getHtmlId() : '_' . uniqid();
+
+if($this->getHtmlId()) {
+    $_htmlId = $this->getHtmlId();
+} else if($this->getName()) {
+    $_htmlId = '_' . $this->getName();
+} else {
+    $_htmlId = '_' . uniqid();
+}
 
 $_colspan = 2;
 if (!$this->_addAfter) {
@@ -32,52 +39,54 @@ $_colspan = $_colspan > 1 ? 'colspan="' . $_colspan . '"' : '';
     <tr>
         <td class="label"><?php echo trim($this->getElementLabelHtml()) ?></td>
         <td class="value">
+            <div id="<?php echo $_element->getId(); ?>">
+                <div class="grid" id="grid<?php echo $_htmlId ?>">
+                    <table cellpadding="0" cellspacing="0" class="border">
+                        <tbody>
 
-            <div class="grid" id="grid<?php echo $_htmlId ?>">
-                <table cellpadding="0" cellspacing="0" class="border">
-                    <tbody>
+                            <tr class="headings" id="headings<?php echo $_htmlId ?>">
+                                <?php foreach ($this->_columns as $columnName => $column):?>
+                                    <th><?php echo $column['label'] ?></th>
+                                <?php endforeach;?>
+                                <th <?php echo $_colspan?>></th>
+                            </tr>
 
-                        <tr class="headings" id="headings<?php echo $_htmlId ?>">
-                            <?php foreach ($this->_columns as $columnName => $column):?>
-                                <th><?php echo $column['label'] ?></th>
-                            <?php endforeach;?>
-                            <th <?php echo $_colspan?>></th>
-                        </tr>
+                            <tr id="addRow<?php echo $_htmlId ?>">
+                                <td colspan="<?php echo count($this->_columns) ?>"></td>
+                                <td <?php echo $_colspan?>>
+                                    <button style="" onclick="" class="scalable add" type="button" id="addToEndBtn<?php echo $_htmlId ?>">
+                                        <span><span><span><?php echo $this->_addButtonLabel ?></span></span></span>
+                                    </button>
+                                </td>
+                            </tr>
 
-                        <tr id="addRow<?php echo $_htmlId ?>">
-                            <td colspan="<?php echo count($this->_columns) ?>"></td>
-                            <td <?php echo $_colspan?>>
-                                <button style="" onclick="" class="scalable add" type="button" id="addToEndBtn<?php echo $_htmlId ?>">
-                                    <span><span><span><?php echo $this->_addButtonLabel ?></span></span></span>
-                                </button>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-                <input type="hidden" name="<?php echo $_element->getName() ?>[__empty]" value="" />
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="<?php echo $_element->getName() ?>[__empty]" value="" />
+                </div>
+                <div id="empty<?php echo $_htmlId ?>">
+                    <button style="" onclick="" class="scalable add" type="button" id="emptyAddBtn<?php echo $_htmlId ?>">
+                        <span><span><span><?php echo $this->_addButtonLabel ?></span></span></span>
+                    </button>
+                </div>
+                <?php if ($this->getCanCopyPasteJson()): ?>
+                    <p>
+                        <button style="" onclick="" class="scalable" type="button" id="copyJson<?php echo $_htmlId ?>">
+                            <span><span><span><?php echo $this->__('Copy JSON'); ?></span></span></span>
+                        </button>
+                        <button style="" onclick="" class="scalable" type="button" id="pasteJson<?php echo $_htmlId ?>">
+                            <span><span><span><?php echo $this->__('Paste JSON'); ?></span></span></span>
+                        </button>
+                    </p>
+                    <p id="pasteJsonArea<?php echo $_htmlId ?>" style="display: none;">
+                        <textarea id="jsonText<?php echo $_htmlId ?>"></textarea>
+                        <button style="" onclick="" class="scalable" type="button" id="importJson<?php echo $_htmlId ?>">
+                            <span><span><span><?php echo $this->__('Update Table'); ?></span></span></span>
+                        </button>
+                    </p>
+                <?php endif; ?>
             </div>
-            <div id="empty<?php echo $_htmlId ?>">
-                <button style="" onclick="" class="scalable add" type="button" id="emptyAddBtn<?php echo $_htmlId ?>">
-                    <span><span><span><?php echo $this->_addButtonLabel ?></span></span></span>
-                </button>
-            </div>
-            <?php if ($this->getCanCopyPasteJson()): ?>
-                <p>
-                    <button style="" onclick="" class="scalable" type="button" id="copyJson<?php echo $_htmlId ?>">
-                        <span><span><span><?php echo $this->__('Copy JSON'); ?></span></span></span>
-                    </button>
-                    <button style="" onclick="" class="scalable" type="button" id="pasteJson<?php echo $_htmlId ?>">
-                        <span><span><span><?php echo $this->__('Paste JSON'); ?></span></span></span>
-                    </button>
-                </p>
-                <p id="pasteJsonArea<?php echo $_htmlId ?>" style="display: none;">
-                    <textarea id="jsonText<?php echo $_htmlId ?>"></textarea>
-                    <button style="" onclick="" class="scalable" type="button" id="importJson<?php echo $_htmlId ?>">
-                        <span><span><span><?php echo $this->__('Update Table'); ?></span></span></span>
-                    </button>
-                </p>
-            <?php endif; ?>
+            <?php echo $_element->getAfterElementHtml(); ?>
             <?php if ($_element->getNote()) : ?>
                 <p class="note"><?php echo $_element->getNote() ?></p>
             <?php endif; ?>
@@ -85,7 +94,7 @@ $_colspan = $_colspan > 1 ? 'colspan="' . $_colspan . '"' : '';
         <td class="scope-label"><span class="nobr"><?php echo $this->getScopeLabel() ?></span></td>
         <?php if ($this->canDisplayUseDefault()): ?>
             <td class="value use-default">
-                <input <?php if($_element->getReadonly()):?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $_element->getHtmlId() ?>_default"<?php if ($this->usedDefault()): ?> checked="checked"<?php endif; ?> onclick="toggleValueElements(this, this.parentNode.parentNode)" value="<?php echo $this->getAttributeCode() ?>"/>
+                <input <?php if($_element->getReadonly()):?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $_element->getHtmlId() ?>_default"<?php if ($this->usedDefault()): ?> checked="checked"<?php endif; ?> onclick="toggleValueElements(this, this.parentNode.parentNode)" value="<?php echo $this->getName() ?>"/>
                 <label for="<?php echo $_element->getHtmlId() ?>_default" class="normal"><?php echo $this->__('Use Default Value') ?></label>
             </td>
         <?php endif; ?>
@@ -94,8 +103,8 @@ $_colspan = $_colspan > 1 ? 'colspan="' . $_colspan . '"' : '';
 
 <script type="text/javascript">
 //<![CDATA[
-// create row creator
-var arrayRow<?php echo $_htmlId ?> = {
+// create global row creator
+arrayRow<?php echo $_htmlId ?> = {
     // define row prototypeJS template
     template : new Template(
         '<tr id="#{_id}">'
@@ -203,7 +212,6 @@ var arrayRow<?php echo $_htmlId ?> = {
         }.bind(this));
     }
 }
-
 // bind add action to "Add" button in last row
 Event.observe('addToEndBtn<?php echo $_htmlId ?>', 'click', arrayRow<?php echo $_htmlId ?>.add.bind(arrayRow<?php echo $_htmlId ?>, '', ''));
 
@@ -251,5 +259,6 @@ arrayRow<?php echo $_htmlId ?>.showButtonOnly();
 <?php if ($this->getElement()->getDisabled()):?>
 toggleValueElements({checked:true}, $('grid<?php echo $_htmlId ?>').parentNode);
 <?php endif;?>
+
 //]]>
 </script>

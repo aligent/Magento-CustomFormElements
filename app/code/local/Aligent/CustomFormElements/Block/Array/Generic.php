@@ -107,7 +107,7 @@ class Aligent_CustomFormElements_Block_Array_Generic extends Mage_Adminhtml_Bloc
         if (!$this->getDataObject()->getExistsStoreValueFlag($attributeCode)) {
             return true;
         } else if ($this->getElement()->getValue() == $defaultValue &&
-            $this->getDataObject()->getStoreId() != $this->_getDefaultStoreId()
+            $this->getDataObject()->getStoreId() != Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
         ) {
             return false;
         }

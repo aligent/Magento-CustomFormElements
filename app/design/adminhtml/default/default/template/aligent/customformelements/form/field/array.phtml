@@ -185,7 +185,6 @@ arrayRow<?php echo $_htmlId ?> = {
             for (var colIdx=0; colIdx<this.columnNames.length; colIdx++) {
                 rowData[this.columnNames[colIdx]] =
                     $$('input[name="<?php echo $_element->getName() ?>['+this.rowIds[idx]+']['+this.columnNames[colIdx]+']"]').first().value;
-
             }
 
             tableData.push(rowData);
@@ -231,6 +230,7 @@ Event.observe('addToEndBtn<?php echo $_htmlId ?>', 'click', arrayRow<?php echo $
         var json = $('jsonText<?php echo $_htmlId ?>').value;
         arrayRow<?php echo $_htmlId ?>.fromJson(json);
         $("pasteJsonArea<?php echo $_htmlId ?>").hide();
+        updateAllSelect();
     });
 
 <?php endif; ?>
@@ -259,6 +259,31 @@ arrayRow<?php echo $_htmlId ?>.showButtonOnly();
 <?php if ($this->getElement()->getDisabled()):?>
 toggleValueElements({checked:true}, $('grid<?php echo $_htmlId ?>').parentNode);
 <?php endif;?>
+
+function updateSelect(el) {
+    var selector = el.name;
+    var options = $(selector).options;
+    for (var i = 0; i < options.length; i++) {
+        if (el.value.split(",").include(options[i].value)) {
+            options[i].selected = true;
+        } else {
+            options[i].selected = false;
+        }
+    }
+}
+
+function updateField(el) {
+    var selector = el.id;
+    $$('input[name="' + selector + '"]').first().value = el.getValue();
+}
+
+function updateAllSelect() {
+    $$('.custom-el-input-placeholder').each(function(el) {
+        updateSelect(el);
+    });
+}
+
+document.observers('dom:loaded', updateAllSelect());
 
 //]]>
 </script>

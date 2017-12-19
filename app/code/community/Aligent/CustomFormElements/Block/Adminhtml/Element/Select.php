@@ -12,7 +12,6 @@ class Aligent_CustomFormElements_Block_Adminhtml_Element_Select extends Mage_Cor
             $oSource = Mage::getSingleton($vSourceClassName);
         }
 
-        $oSource = Mage::getSingleton($vSourceClassName);
         if (method_exists($oSource, 'toOptionArray')) {
             $this->_oOptions = $oSource->toOptionArray();
         } elseif (method_exists($oSource, 'getAllOptions')) {

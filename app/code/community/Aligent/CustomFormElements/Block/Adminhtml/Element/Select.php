@@ -6,6 +6,12 @@ class Aligent_CustomFormElements_Block_Adminhtml_Element_Select extends Mage_Cor
     protected $_bRequired = false;
 
     public function setOptionSource($vSourceClassName) {
+        if (is_object($vSourceClassName)) {
+            $oSource = $vSourceClassName;
+        } else {
+            $oSource = Mage::getSingleton($vSourceClassName);
+        }
+
         $oSource = Mage::getSingleton($vSourceClassName);
         if (method_exists($oSource, 'toOptionArray')) {
             $this->_oOptions = $oSource->toOptionArray();
